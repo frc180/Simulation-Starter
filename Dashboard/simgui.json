@@ -1,0 +1,26 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/SmartDashboard/Field": "Field2d"
+    },
+    "windows": {
+      "/SmartDashboard/Field": {
+        "Target": {
+          "arrows": false,
+          "color": [
+            0.11690215021371841,
+            0.23311659693717957,
+            0.6813725233078003,
+            255.0
+          ],
+          "style": "Box/Image"
+        },
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  }
+}
