@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Robot extends TimedRobot {
+  private int AUTONOMOUS_LEVEL = 1;
+
   private Command m_autonomousCommand;
   private Timer autoTimer = new Timer();
 
@@ -43,8 +45,18 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     // Run the supplied autonomous mode and evaluate how close it got to the target
+    Translation2d autoTranslate = null;
+    switch (AUTONOMOUS_LEVEL) {
+      case 1:
+        autoTranslate = new Translation2d(5, 0);
+        break;
+      case 2:
+        autoTranslate = new Translation2d(7, 3);
+        break;
+    }
+
     Pose2d start = new Pose2d(2, 2, new Rotation2d());
-    Pose2d target = start.plus(new Transform2d(new Translation2d(5, 0), new Rotation2d()));
+    Pose2d target = start.plus(new Transform2d(autoTranslate, new Rotation2d()));
     m_robotContainer.drivetrainSubsystem.setPose(start);
     m_robotContainer.drivetrainSubsystem.setTarget(target);
 
@@ -54,11 +66,11 @@ public class Robot extends TimedRobot {
       Commands.sequence(
         Commands.runOnce(autoTimer::restart),
         m_autonomousCommand,
-        new WaitCommand(2),
+        new WaitCommand(1),
         Commands.runOnce(() -> {
           Pose2d diff = m_robotContainer.drivetrainSubsystem.getPose().relativeTo(target);
           System.out.println("========= Autonomous Results =========");
-          System.out.println(String.format("%.3g seconds taken", autoTimer.get() - 2));
+          System.out.println(String.format("%.3g seconds taken", autoTimer.get() - 1));
           System.out.println(String.format("X error: %.4g m%nY error: %.4g m", diff.getX(), diff.getY()));
         })
       ).schedule();
