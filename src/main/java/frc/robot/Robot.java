@@ -45,21 +45,21 @@ public class Robot extends TimedRobot {
     // Run the supplied autonomous mode and evaluate how close it got to the target
     Pose2d start = new Pose2d(2, 2, new Rotation2d());
     Pose2d target = start.plus(new Transform2d(new Translation2d(5, 0), new Rotation2d()));
+    m_robotContainer.drivetrainSubsystem.setPose(start);
+    m_robotContainer.drivetrainSubsystem.setTarget(target);
+
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
       Commands.sequence(
-        Commands.runOnce(() -> {
-          m_robotContainer.drivetrainSubsystem.setPose(start);
-          m_robotContainer.drivetrainSubsystem.setTarget(target);
-          autoTimer.restart();
-        }),
+        Commands.runOnce(autoTimer::restart),
         m_autonomousCommand,
         new WaitCommand(2),
         Commands.runOnce(() -> {
           Pose2d diff = m_robotContainer.drivetrainSubsystem.getPose().relativeTo(target);
+          System.out.println("========= Autonomous Results =========");
           System.out.println(String.format("%.3g seconds taken", autoTimer.get() - 2));
-          System.out.println(String.format("X error: %.4g%nY error: %.4g", diff.getX(), diff.getY()));
+          System.out.println(String.format("X error: %.4g m%nY error: %.4g m", diff.getX(), diff.getY()));
         })
       ).schedule();
     }

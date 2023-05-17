@@ -51,12 +51,6 @@ public class Drivetrain extends SubsystemBase {
     setSpeed(forward + turn, forward - turn);
   }
 
-  public CommandBase tankDriveCommand(DoubleSupplier leftSpeed, DoubleSupplier rightSpeed) {
-    return Commands.run(() -> {
-      setSpeed(leftSpeed.getAsDouble(), rightSpeed.getAsDouble());
-    }, this);
-  }
-
   public CommandBase arcadeDriveCommand(DoubleSupplier forwardSpeed, DoubleSupplier turnSpeed) {
     return Commands.run(() -> {
       arcadeDrive(forwardSpeed.getAsDouble(), turnSpeed.getAsDouble());
